@@ -13,6 +13,7 @@ from models.state import State
 from sqlalchemy.orm import scoped_session
 from models.user import User
 
+
 class DBStorage:
     """"""
     __engine = None
@@ -27,14 +28,17 @@ class DBStorage:
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'
                                       .format(user, password, host, database),
                                       pool_pre_ping=True)
-        
+
         if getenv('HBNB_ENV') == 'test':
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
         """Query objects from the current database session."""
         result = {}
-        classes_to_query = [State, City, Amenity, Place, Review] if cls is None else [cls]
+        if cls is None:
+            classes_to_query = [State, City, Amenity, Place, Review, User]
+        else:
+            classes_to_query = [cls] if type(cls) is not list else cls
 
         for class_obj in classes_to_query:
             objects = self.__session.query(class_obj)
@@ -55,7 +59,7 @@ class DBStorage:
     def delete(self, obj=None):
         if obj is not None:
             self.__session.delete(obj)
-    
+
     def reload(self):
         Base.metadata.create_all(self.__engine)
         Session = sessionmaker(bind=self.__engine)
