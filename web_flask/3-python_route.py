@@ -17,13 +17,16 @@ def HBNB():
 
 
 @app.route('/c/<text>', strict_slashes=False)
-def C_is_fun(text):
-    return 'C {}'.format(text.replace('_', ' '))
+def c_route(text):
+    text = text.replace('_', ' ')
+    return 'C {}'.format(text)
 
 
 @app.route('/python/<text>', strict_slashes=False)
-def Python_is_cool(text='is cool'):
-    return 'Python {}'.format(text.replace('_', ' '))
+@app.route('/python/', strict_slashes=False)
+def python_route(text='is cool'):
+    text = text.replace('_', ' ')
+    return 'Python {}'.format(text)
 
 
 if __name__ == '__main__':
