@@ -19,13 +19,13 @@ class State(BaseModel, Base):
 
     else:
         @property
-        def cities(self, *args, **kwargs):
+        def cities(self):
+            """ getter for cities """
             from models import storage
-            city_list = []
-            for city in storage.all("City").values():
+            from models.city import City
+            cities = storage.all(City)
+            cities_list = []
+            for city in cities.values():
                 if city.state_id == self.id:
-                    city_list.append(city)
-            
-            print(f"State ID: {self.id}")
-            print(f"Cities: {city_list}")
-            return city_list
+                    cities_list.append(city)
+            return cities_list
