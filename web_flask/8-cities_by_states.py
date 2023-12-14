@@ -96,22 +96,3 @@ def cities_by_states():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
-    with app.app_context():
-        for _ in range(3):
-            new_state = State(name=fake.state())
-            storage.new(new_state)
-            storage.save()
-
-            for _ in range(2):
-                new_city = City(name=fake.city(), state_id=new_state.id)
-                storage.new(new_city)
-                storage.save()
-
-        new_state = State(name=fake.state())
-        storage.new(new_state)
-        storage.save()
-
-        for _ in range(4):
-            new_city = City(name=fake.city(), state_id=new_state.id)
-            storage.new(new_city)
-            storage.save()
