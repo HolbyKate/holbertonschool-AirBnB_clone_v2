@@ -6,22 +6,24 @@ handle 'C' and 'Python' routes, and display numbers
 
 from flask import Flask, render_template
 from models import storage
+from models.state import State
+from models.city import City
 
 app = Flask(__name__)
 
 
-@app.teardown_appcontext
-def teardown_appcontext(self):
-    """Closes storage"""
-    storage.close()
-
-
-@app.route('/states_list', strict_slashes=False)
-def states_list():
-    """Displays HTML page with list of states"""
-    states = storage.all('State').values()
+@app.route("/states_list", strict_slashes=False)
+def display_html():
+    states = storage.all(State).values()
     sorted_states = sorted(states, key=lambda state: state.name)
-    return render_template('7-states_list.html', states=sorted_states)
+
+    return render_template("7-states_list.html", states=sorted_states)
+
+
+@app.teardown_appcontext
+def teardown(exception):
+    """Remove the current SQLAlchemy Session"""
+    storage.close()
 
 
 if __name__ == '__main__':
