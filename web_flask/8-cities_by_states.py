@@ -5,12 +5,14 @@ handle 'C' and 'Python' routes, and display numbers
 """
 
 from flask import Flask, redirect, render_template, request
+from faker import Faker
 from models import storage
 from models.state import State
 from models.city import City
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
+fake = Faker()
 
 
 @app.route('/', strict_slashes=False)
@@ -79,9 +81,14 @@ def add_state():
 
 @app.route('/cities_by_states', strict_slashes=False)
 def cities_by_states():
-    """Display a HTML page with a list of all State objects in DBStorage."""
     states = storage.all(State)
     cities = storage.all(City)
+
+    state_cities = {state: [city for city in cities.values()
+                            if getattr(city, 'state_id', None) == state.id]
+                    for state in states}
+
+    print(state_cities)
 
     return render_template("8-cities_by_states.html",
                            cities=cities,
@@ -89,4 +96,23 @@ def cities_by_states():
 
 
 if __name__ == '__main__':
+    with app.app_context():
+        for _ in range(3):
+            new_state = State(name=fake.state())
+            storage.new(new_state)
+            storage.save()
+
+            for _ in range(2):
+                new_city = City(name=fake.city(), state_id=new_state.id)
+                storage.new(new_city)
+                storage.save()
+
+        new_state = State(name=fake.state())
+        storage.new(new_state)
+        storage.save()
+
+        for _ in range(4):
+            new_city = City(name=fake.city(), state_id=new_state.id)
+            storage.new(new_city)
+            storage.save()
     app.run(host='0.0.0.0', port=5000)
