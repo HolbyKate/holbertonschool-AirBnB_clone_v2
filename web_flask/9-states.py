@@ -6,7 +6,6 @@ handle 'C' and 'Python' routes, and display numbers
 
 from flask import Flask, render_template
 from models import storage
-from models import storage.all
 from models.state import State
 from models.city import City
 
@@ -68,13 +67,10 @@ def display_html():
 
 @app.route('/cities_by_states', strict_slashes=False)
 def cities_by_states():
-    """Display a HTML page with a list of all State objects in DBStorage."""
-    states = storage.all(State)
-    cities = storage.all(City)
+    states = storage.all(State).values()
+    sorted_states = sorted(states, key=lambda state: state.name)
 
-    return render_template("8-cities_by_states.html",
-                           cities=cities,
-                           states=states)
+    return render_template("8-cities_by_states.html", states=sorted_states)
 
 
 @app.route('/states', strict_slashes=False)
