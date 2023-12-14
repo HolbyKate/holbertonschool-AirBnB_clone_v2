@@ -36,9 +36,9 @@ class DBStorage:
         """Query objects from the current database session."""
         result = {}
         if cls is None:
-            classes_to_query = [State, City, Amenity, Place, Review, User]
+            classes_to_query = [State, City, Amenity, Place, Review]
         else:
-            classes_to_query = [cls] if type(cls) is not list else cls
+            classes_to_query = [cls]
 
         for class_obj in classes_to_query:
             objects = self.__session.query(class_obj)
