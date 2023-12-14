@@ -11,21 +11,20 @@ class State(BaseModel, Base):
     """ State class """
 
     __tablename__ = 'states'
-    name = Column(String(128), nullable=False)
 
     if getenv("HBNB_TYPE_STORAGE") == "db":
+        name = Column(String(128), nullable=False)
         cities_relation = relationship(
-            'City', backref='state', cascade='all, delete')
+            'City',
+            backref='state',
+            cascade='all, delete')
 
     else:
         @property
         def cities(self):
-            """ getter for cities """
             from models import storage
-            from models.city import City
-            cities = storage.all(City)
-            cities_list = []
-            for city in cities.values():
+            city_list = []
+            for city in storage.all(City).values():
                 if city.state_id == self.id:
-                    cities_list.append(city)
-            return cities_list
+                    city_list.append(city)
+            return city_list
