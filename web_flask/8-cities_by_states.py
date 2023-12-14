@@ -4,7 +4,7 @@ Simple Flask web application with routes to display 'Hello HBNB', 'HBNB',
 handle 'C' and 'Python' routes, and display numbers
 """
 
-from flask import Flask, render_template
+from flask import Flask, redirect, render_template, request
 from models import storage
 from models.state import State
 from models.city import City
@@ -63,6 +63,18 @@ def display_html():
     sorted_states = sorted(states, key=lambda state: state.name)
 
     return render_template("7-states_list.html", states=sorted_states)
+
+
+@app.route("/add_state", methods=['POST'])
+def add_state():
+    if request.method == 'POST':
+        new_state_name = request.json.get('name')
+
+        new_state = State(name=new_state_name)
+        storage.new(new_state)
+        storage.save()
+
+    return redirect("/states_list")
 
 
 @app.route('/cities_by_states', strict_slashes=False)
