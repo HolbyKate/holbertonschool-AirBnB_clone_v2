@@ -5,14 +5,12 @@ handle 'C' and 'Python' routes, and display numbers
 """
 
 from flask import Flask, redirect, render_template, request
-from faker import Faker
 from models import storage
 from models.state import State
 from models.city import City
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
-fake = Faker()
 
 
 @app.route('/', strict_slashes=False)
