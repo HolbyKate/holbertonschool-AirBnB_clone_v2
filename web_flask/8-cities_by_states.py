@@ -79,18 +79,10 @@ def add_state():
 
 @app.route('/cities_by_states', strict_slashes=False)
 def cities_by_states():
-    states = storage.all(State)
-    cities = storage.all(City)
+    states = storage.all(State).values()
+    sorted_states = sorted(states, key=lambda state: state.name)
 
-    state_cities = {state: [city for city in cities.values()
-                            if getattr(city, 'state_id', None) == state.id]
-                    for state in states}
-
-    print(state_cities)
-
-    return render_template("8-cities_by_states.html",
-                           cities=cities,
-                           states=states)
+    return render_template("8-cities_by_states.html", states=sorted_states)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
