@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+"""This module defines a class to manage file storage for hbnb clone"""
+
 from flask import Flask, render_template
 from models import storage
 from models.state import State
