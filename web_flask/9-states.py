@@ -62,15 +62,17 @@ def display_html():
     states = storage.all(State).values()
     sorted_states = sorted(states, key=lambda state: state.name)
 
-    return render_template("7-states_list.html", states=sorted_states)
+    return render_template("9-states.html", states=sorted_states)
 
 
 @app.route('/cities_by_states', strict_slashes=False)
 def cities_by_states():
-    states = storage.all(State).values()
-    sorted_states = sorted(states, key=lambda state: state.name)
-
-    return render_template("8-cities_by_states.html", states=sorted_states)
+    state = storage.get(State, id)
+    if state is not None:
+        cities = sorted(state.cities, key=lambda city: city.name)
+        return render_template('9-states.html', state=state, cities=cities)
+    else:
+        return render_template('9-states.html', not_found=True)
 
 
 @app.route('/states', strict_slashes=False)
