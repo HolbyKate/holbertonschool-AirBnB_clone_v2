@@ -6,7 +6,7 @@ handle 'C' and 'Python' routes, and display numbers
 
 from models import storage
 from models import *
-from flask import Flask, render_template
+from flask import Flask, abort, render_template
 
 
 app = Flask(__name__)
@@ -85,14 +85,14 @@ def html_fetch_states():
 
 @app.route('/cities_by_states')
 def html_fetch_cities_by_states():
-    """display html page
-       fetch sorted states to insert into html in UL tag
-       fetch sorted cities in each state into LI tag ->in HTML file
-    """
-    state_objs = [s for s in storage.all("State").values()]
-    return render_template('8-cities_by_states.html',
-                           state_objs=state_objs)
+    try:
+        state_objs = [s for s in storage.all("State").values()]
+        return render_template('8-cities_by_states.html', state_objs=state_objs)
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        app.logger.error(f"An error occurred: {e}")
+        abort(500)
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=5000, debug=True)
