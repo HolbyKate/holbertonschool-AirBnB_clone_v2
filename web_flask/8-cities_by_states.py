@@ -62,7 +62,7 @@ def display_html():
     states = storage.all(State).values()
     sorted_states = sorted(states, key=lambda state: state.name)
 
-    return render_template("7-states_list.html", states=sorted_states)
+    return render_template("8-cities_by_states.html", states=sorted_states)
 
 
 @app.route("/add_state", methods=['POST'])
