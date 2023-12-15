@@ -87,7 +87,8 @@ def html_fetch_states():
 def html_fetch_cities_by_states():
     try:
         state_objs = [s for s in storage.all("State").values()]
-        return render_template('8-cities_by_states.html', state_objs=state_objs)
+        return render_template('8-cities_by_states.html',
+                               state_objs=state_objs)
     except Exception as e:
         print(f"An error occurred: {e}")
         app.logger.error(f"An error occurred: {e}")
@@ -95,4 +96,4 @@ def html_fetch_cities_by_states():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5000)
